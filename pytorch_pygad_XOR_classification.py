@@ -1,17 +1,13 @@
 import torch
-import torchga
+import pygad.torchga
 import pygad
 
 def fitness_func(solution, sol_idx):
     global data_inputs, data_outputs, torch_ga, model, loss_function
 
-    model_weights_dict = torchga.model_weights_as_dict(model=model,
-                                                         weights_vector=solution)
-
-    # Use the current solution as the model parameters.
-    model.load_state_dict(model_weights_dict)
-
-    predictions = model(data_inputs)
+    predictions = pygad.torchga.predict(model=model, 
+                                        solution=solution, 
+                                        data=data_inputs)
 
     solution_fitness = 1.0 / (loss_function(predictions, data_outputs).detach().numpy() + 0.00000001)
 
@@ -34,8 +30,8 @@ model = torch.nn.Sequential(input_layer,
 # print(model)
 
 # Create an instance of the pygad.torchga.TorchGA class to build the initial population.
-torch_ga = torchga.TorchGA(model=model,
-                           num_solutions=10)
+torch_ga = pygad.torchga.TorchGA(model=model,
+                                 num_solutions=10)
 
 loss_function = torch.nn.BCELoss()
 
@@ -55,22 +51,12 @@ data_outputs = torch.tensor([[1.0, 0.0],
 num_generations = 250 # Number of generations.
 num_parents_mating = 5 # Number of solutions to be selected as parents in the mating pool.
 initial_population = torch_ga.population_weights # Initial population of network weights.
-parent_selection_type = "sss" # Type of parent selection.
-crossover_type = "single_point" # Type of the crossover operator.
-mutation_type = "random" # Type of the mutation operator.
-mutation_percent_genes = 10 # Percentage of genes to mutate. This parameter has no action if the parameter mutation_num_genes exists.
-keep_parents = -1 # Number of parents to keep in the next population. -1 means keep all parents and 0 means keep nothing.
 
 # Create an instance of the pygad.GA class
 ga_instance = pygad.GA(num_generations=num_generations, 
                        num_parents_mating=num_parents_mating, 
                        initial_population=initial_population,
                        fitness_func=fitness_func,
-                       parent_selection_type=parent_selection_type,
-                       crossover_type=crossover_type,
-                       mutation_type=mutation_type,
-                       mutation_percent_genes=mutation_percent_genes,
-                       keep_parents=keep_parents,
                        on_generation=callback_generation)
 
 # Start the genetic algorithm evolution.
@@ -84,11 +70,9 @@ solution, solution_fitness, solution_idx = ga_instance.best_solution()
 print("Fitness value of the best solution = {solution_fitness}".format(solution_fitness=solution_fitness))
 print("Index of the best solution : {solution_idx}".format(solution_idx=solution_idx))
 
-# Fetch the parameters of the best solution.
-best_solution_weights = torchga.model_weights_as_dict(model=model,
-                                                      weights_vector=solution)
-model.load_state_dict(best_solution_weights)
-predictions = model(data_inputs)
+predictions = pygad.torchga.predict(model=model, 
+                                    solution=solution, 
+                                    data=data_inputs)
 print("Predictions : \n", predictions.detach().numpy())
 
 # Calculate the binary crossentropy for the trained model.
@@ -97,5 +81,5 @@ print("Binary Crossentropy : ", loss_function(predictions, data_outputs).detach(
 # Calculate the classification accuracy of the trained model.
 a = torch.max(predictions, axis=1)
 b = torch.max(data_outputs, axis=1)
-accuracy = torch.sum(a.indices == b.indices) / len(data_outputs)
+accuracy = torch.true_divide(torch.sum(a.indices == b.indices), len(data_outputs))
 print("Accuracy : ", accuracy.detach().numpy())

@@ -1,1 +1,3 @@
 pygad
+torch
+numpy

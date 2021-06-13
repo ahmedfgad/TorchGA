@@ -33,6 +33,18 @@ def model_weights_as_dict(model, weights_vector):
 
     return weights_dict
 
+def predict(model, solution, data):
+    # Fetch the parameters of the best solution.
+    model_weights_dict = model_weights_as_dict(model=model,
+                                               weights_vector=solution)
+
+    # Use the current solution as the model parameters.
+    model.load_state_dict(model_weights_dict)
+
+    predictions = model(data)
+
+    return predictions
+
 class TorchGA:
 
     def __init__(self, model, num_solutions):
