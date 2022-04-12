@@ -9,7 +9,7 @@ def model_weights_as_vector(model):
         # Calling detach() to remove the computational graph from the layer.
         # cpu() is called for making shore the data is moved from GPU to cpu
         # numpy() is called for converting the tensor into a NumPy array.
-        curr_weights = curr_weights.detach().cpu().numpy()
+        curr_weights = curr_weights.cpu().detach().numpy()
         vector = numpy.reshape(curr_weights, newshape=(curr_weights.size))
         weights_vector.extend(vector)
 
@@ -23,7 +23,7 @@ def model_weights_as_dict(model, weights_vector):
         # Calling detach() to remove the computational graph from the layer.
         # cpu() is called for making shore the data is moved from GPU to cpu
         # numpy() is called for converting the tensor into a NumPy array.
-        w_matrix = weights_dict[key].detach().cpu().numpy()
+        w_matrix = weights_dict[key].cpu().detach().numpy()
         layer_weights_shape = w_matrix.shape
         layer_weights_size = w_matrix.size
 
