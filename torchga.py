@@ -41,7 +41,9 @@ def predict(model, solution, data):
     # Use the current solution as the model parameters.
     model.load_state_dict(model_weights_dict)
 
-    predictions = model(data)
+    # Deactivates autograd engine. reduce the memory usage and speed up computations
+    with torch.no_grad():
+        predictions = model(data)
 
     return predictions
 
