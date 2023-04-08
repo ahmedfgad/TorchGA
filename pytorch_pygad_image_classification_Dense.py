@@ -3,7 +3,7 @@ import pygad.torchga
 import pygad
 import numpy
 
-def fitness_func(solution, sol_idx):
+def fitness_func(ga_instanse, solution, sol_idx):
     global data_inputs, data_outputs, torch_ga, model, loss_function
 
     predictions = pygad.torchga.predict(model=model, 

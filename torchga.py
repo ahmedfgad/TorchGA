@@ -20,7 +20,7 @@ def model_weights_as_dict(model, weights_vector):
 
     start = 0
     for key in weights_dict:
-        # Calling detach() to remove the computational graph from the layer.
+        # Calling detach() to remove the computational graph from the layer. 
         # cpu() is called for making shore the data is moved from GPU to cpu
         # numpy() is called for converting the tensor into a NumPy array.
         w_matrix = weights_dict[key].cpu().detach().numpy()
@@ -41,9 +41,10 @@ def predict(model, solution, data):
                                                weights_vector=solution)
 
     # Use the current solution as the model parameters.
-    model.load_state_dict(model_weights_dict)
+    _model = copy.deepcopy(model)
+    _model.load_state_dict(model_weights_dict)
 
-    predictions = model(data)
+    predictions = _model(data)
 
     return predictions
 

@@ -2,7 +2,7 @@ import torch
 import pygad.torchga
 import pygad
 
-def fitness_func(solution, sol_idx):
+def fitness_func(ga_instanse, solution, sol_idx):
     global data_inputs, data_outputs, torch_ga, model, loss_function
 
     predictions = pygad.torchga.predict(model=model, 
@@ -57,6 +57,7 @@ ga_instance = pygad.GA(num_generations=num_generations,
                        num_parents_mating=num_parents_mating, 
                        initial_population=initial_population,
                        fitness_func=fitness_func,
+                       parallel_processing=3,
                        on_generation=callback_generation)
 
 # Start the genetic algorithm evolution.

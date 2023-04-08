@@ -13,9 +13,10 @@ pip install pygad
 
 # Donation
 
-You can donate via [Open Collective](https://opencollective.com/pygad): [opencollective.com/pygad](https://opencollective.com/pygad). 
-
-To donate using PayPal, use either this link: [paypal.me/ahmedfgad](https://paypal.me/ahmedfgad) or the e-mail address ahmed.f.gad@gmail.com.
+- [Credit/Debit Card](https://donate.stripe.com/eVa5kO866elKgM0144): https://donate.stripe.com/eVa5kO866elKgM0144
+- [Open Collective](https://opencollective.com/pygad): [opencollective.com/pygad](https://opencollective.com/pygad)
+- PayPal: Use either this link: [paypal.me/ahmedfgad](https://paypal.me/ahmedfgad) or the e-mail address ahmed.f.gad@gmail.com
+- Interac e-Transfer: Use e-mail address ahmed.f.gad@gmail.com
 
 # Installation
 
@@ -72,7 +73,7 @@ import numpy
 function_inputs = [4,-2,3.5,5,-11,-4.7]
 desired_output = 44
 
-def fitness_func(solution, solution_idx):
+def fitness_func(ga_instance, solution, solution_idx):
     output = numpy.sum(solution*function_inputs)
     fitness = 1.0 / (numpy.abs(output - desired_output) + 0.000001)
     return fitness
@@ -153,7 +154,7 @@ import torch
 import torchga
 import pygad
 
-def fitness_func(solution, sol_idx):
+def fitness_func(ga_instance, solution, sol_idx):
     global data_inputs, data_outputs, torch_ga, model, loss_function
 
     model_weights_dict = torchga.model_weights_as_dict(model=model,
@@ -240,7 +241,7 @@ import torch
 import torchga
 import pygad
 
-def fitness_func(solution, sol_idx):
+def fitness_func(ga_instance, solution, sol_idx):
     global data_inputs, data_outputs, torch_ga, model, loss_function
 
     model_weights_dict = torchga.model_weights_as_dict(model=model,
